@@ -14,10 +14,13 @@ class ClearanceMiddleware {
      * @return mixed
      */
     public function handle($request, Closure $next) {        
+
         if (Auth::user()->hasPermissionTo('Administer roles & permissions')) //If user has this //permission
-    {
+        {
             return $next($request);
         }
+
+    
 
         if ($request->is('posts/create'))//If user is creating a post
          {

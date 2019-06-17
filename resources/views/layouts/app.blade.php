@@ -52,8 +52,16 @@
                         <li><a href="{{ url('/') }}">Home</a></li>
                         @if (!Auth::guest())
                             <li><a href="{{ route('posts.create') }}">New Article</a></li>
-                         @endif
+                        @endif
+                      
+                        @role('Admin') 
+                            <li>
+                                <a href="{{ route('users.index') }}" >Users</a>
+                            </li>                           
+                        @endrole
                     </ul>
+
+
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
