@@ -10,8 +10,10 @@ use Auth;
 
 /*use Session;
 */
+
 class CommentController extends Controller
 {
+
     public function show(Comment $comment)
     {
         $this->authorize('show', $comment);
@@ -86,4 +88,6 @@ class CommentController extends Controller
             'Comment successfully deleted'
         );
     }
+
+    
 }

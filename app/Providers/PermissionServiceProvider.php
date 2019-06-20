@@ -13,7 +13,7 @@ class PermissionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        //Permission model
     }
 
     /**
@@ -23,6 +23,6 @@ class PermissionServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+         //Permission model
     }
 }

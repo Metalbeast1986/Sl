@@ -75,7 +75,7 @@ class PostPolicy
         } 
 
         return false;
-
+        
     }
     public function delete(User $user, Post $post)
     {
@@ -94,7 +94,8 @@ class PostPolicy
             
         } 
 
-        return false;
-
+            return false;
+            
+        
     }
 }
