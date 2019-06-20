@@ -6,7 +6,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
-
 class User extends Authenticatable
 {
     use HasRoles;
@@ -18,7 +17,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 
+        'email',
+        'password',
     ];
 
     /**
@@ -42,5 +43,10 @@ class User extends Authenticatable
     public function setPasswordAttribute($password)
     {   
         $this->attributes['password'] = bcrypt($password);
+    }
+
+    public function location()
+    {   
+        return $this->hasMany(Location::class);
     }
 }

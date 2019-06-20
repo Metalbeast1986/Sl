@@ -29,6 +29,14 @@
 
         @endforeach
     </div>
+    
+    <div class='form-group'>
+        @foreach ($permissions as $permission)
+            {{ Form::checkbox('permissions[]',  $permission->id ) }}
+            {{ Form::label($permission->name, ucfirst($permission->name)) }}<br>
+
+        @endforeach
+    </div>
 
     <div class="form-group">
         {{ Form::label('password', 'Password') }}<br>

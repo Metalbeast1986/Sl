@@ -51,9 +51,28 @@
                     <ul class="nav navbar-nav">
                         <li><a href="{{ url('/') }}">Home</a></li>
                         @if (!Auth::guest())
-                            <li><a href="{{ route('posts.create') }}">New Article</a></li>
-                         @endif
+                            <li><a href="{{ route('posts.create') }}">New Post</a></li>
+                            <li><a href="{{ route('comments.create') }}">New Comment</a></li>
+                        @endif
+                      
+                        @role('Admin') 
+                            <li>
+                                <a href="{{ route('users.index') }}" >Users</a>
+                            </li>
+                                                       
+                        @endrole
+                        <li>
+                            <a href="{{ route('posts.index') }}" >Posts</a>
+                        </li> 
+                        <li>
+                            <a href="{{ route('comments.index') }}" >Comments</a>
+                        </li> 
+                        <li>
+                            <a href="{{ route('locations.index') }}" >Locations</a>
+                        </li> 
                     </ul>
+
+
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">

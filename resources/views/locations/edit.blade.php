@@ -8,26 +8,22 @@
 
 <div class='col-lg-4 col-lg-offset-4'>
 
-    <h1><i class='fa fa-user-plus'></i> Edit {{$user->name}}</h1>
+    <h1><i class='fa fa-user-plus'></i> Edit {{$location->location}}</h1>
     <hr>
 
-    {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT')) }}{{-- Form model binding to automatically populate our fields with user data --}}
+    {{ Form::model($location, array('route' => array('locations.update', $location->id), 'method' => 'PUT')) }}{{-- Form model binding to automatically populate our fields with user data --}}
 
     <div class="form-group">
-        {{ Form::label('name', 'Name') }}
-        {{ Form::text('name', null, array('class' => 'form-control')) }}
+        {{ Form::label('location', 'Location') }}
+        {{ Form::text('location', null, array('class' => 'form-control')) }}
     </div>
 
-    <div class="form-group">
-        {{ Form::label('email', 'Email') }}
-        {{ Form::email('email', null, array('class' => 'form-control')) }}
-    </div>
 
     <h5><b>Give Role</b></h5>
 
     <div class='form-group'>
         @foreach ($roles as $role)
-            {{ Form::checkbox('roles[]',  $role->id, $user->roles ) }}
+            {{ Form::checkbox('roles[]',  $role->id, $location->roles ) }}
             {{ Form::label($role->name, ucfirst($role->name)) }}<br>
 
         @endforeach
@@ -38,7 +34,7 @@
     <div class='form-group'>
   
         @foreach ($permissions as $permission)
-            {{ Form::checkbox('permissions[]',  $permission->id, $user->permissions ) }}
+            {{ Form::checkbox('permissions[]',  $permission->id, $location->permissions ) }}
             {{ Form::label($permission->name, ucfirst($permission->name)) }}<br>
 
         @endforeach
