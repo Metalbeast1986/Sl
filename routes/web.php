@@ -1,10 +1,5 @@
 <?php
 
-
-//Route::get('comments/{comment}', 'CommentController@show');
-
-//Route::patch('/{socialFeed}/like', 'SocialFeedController@like')->name('socialFeed.like');
-
 Route::get('/', function () {
     return view('welcome');
 });

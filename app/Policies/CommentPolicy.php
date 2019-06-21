@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\User;
 use App\Comment;
 use App\Location;
+use Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CommentPolicy
@@ -26,70 +27,27 @@ class CommentPolicy
     }
 
     public function create(User $user)
-    {
+    { 
 
-        //$locations = Location::where('user_id', auth()->id());
-        if ($user->location) {
-            foreach ($user->location as $user_location) {
-                if (($user->hasPermissionTo('Create Post') || $user->hasPermissionTo('Write')) ||
-                ($user->hasRole('Writer') ||  $user->hasRole('Author')) ||
-                ($user_location->hasPermissionTo('Create Post') || $user_location->hasPermissionTo('Write'))) {
+        $userPermisions = app('userPermissions');
 
-                    return true;
-                }
-            }
-        } elseif (($user->hasPermissionTo('Create Post') || $user->hasPermissionTo('Write')) ||
-                ($user->hasRole('Writer') ||  $user->hasRole('Author'))) {  // if user is not assigned to country
-
-            return true;
-        }
+        return $userPermisions->create($user);
         
-        
-        return false;
     }
 
     public function update(User $user, Comment $comment)
     {
-        // if user is assigned to country
-        if ($user->location) {
-            foreach ($user->location as $user_location) {
-                if (($user->hasPermissionTo('Edit Post') || $user->hasPermissionTo('Modify')) ||
-                ($user->hasRole('Editor') ||  $user->hasRole('Modifier') || $user->hasRole('Author')) ||
-                ($user_location->hasPermissionTo('Edit Post') || $user_location->hasPermissionTo('Modify'))) {
+        $userPermisions = app('userPermissions');
 
-                    return $user->id==$comment->user_id;
-                }
-            }
-        } elseif (($user->hasPermissionTo('Edit Post') || $user->hasPermissionTo('Modify')) ||
-                    ($user->hasRole('Editor') ||  $user->hasRole('Modifier') || $user->hasRole('Author'))) {
+        return $userPermisions->update($user, $comment);
 
-            return $user->id==$comment->user_id;
-        }
-        
-        return false;
     }
     
     public function delete(User $user, Comment $comment)
     {
-        if ($user->location) { // if user is assigned to country
-            foreach ($user->location as $user_location) {
-                if (($user->hasPermissionTo('Delete Post') || $user->hasPermissionTo('Administer roles & permissions')) ||
-                ($user->hasRole('Admin') ||  $user->hasRole('Editor') || $user->hasRole('Author')) ||
-                ($user_location->hasPermissionTo('Delete Post') || $user_location->hasPermissionTo('Administer roles & permissions'))) {
-                    if ($user->id==$comment->user_id) {
+        $userPermisions = app('userPermissions');
 
-                        return true;
-                    }
-                }
-            }
-        } elseif (($user->hasPermissionTo('Delete Post') || $user->hasPermissionTo('Administer roles & permissions')) ||
-                ($user->hasRole('Admin') ||  $user->hasRole('Editor') || $user->hasRole('Author'))) { // if user is not assigned to country
-            if ($user->id==$comment->user_id) {
+        return $userPermisions->delete($user, $comment);
 
-                return true;
-            }
-        }
-     
-        return false;
     }
 }

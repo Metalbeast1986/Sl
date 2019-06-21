@@ -1,8 +1,17 @@
 <?php
 
 namespace App\Providers;
+use App;
+use App\Permission;
+use Illuminate\Http\Request;
+use App\Role;
+use App\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
+use Auth;
+use App\Services\UserPermission;
 
 use Illuminate\Support\ServiceProvider;
+
 
 class PermissionServiceProvider extends ServiceProvider
 {
@@ -13,16 +22,11 @@ class PermissionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //Permission model
-    }
+    
+        $this->app->singleton('userPermissions', function () {
+            return App::make(UserPermission::class);
+        });
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-         //Permission model
+    
     }
 }
