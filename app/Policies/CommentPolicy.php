@@ -20,6 +20,8 @@ class CommentPolicy
      * @param  \App\Comment  $comment
      * @return mixed
      */
+    
+
     public function show(User $user, Comment $comment)
     {
 
@@ -29,35 +31,33 @@ class CommentPolicy
 
     public function create(User $user)
     { 
-    //    DB::enableQueryLog();
-       
+
         $userPermisions = app('userPermissions');
-    //    $userPermisions->create($user);
-    //    dd(DB::getQueryLog());
-        return $userPermisions->create($user);
+
+        $operations = array("Create Post", "Write");
+        $hasOwner = "";
+        return $userPermisions->create($user, $operations, $hasOwner);
         
     }
 
     public function update(User $user, Comment $comment)
     {
         $userPermisions = app('userPermissions');
+        $operations = array("Edit Post");
         $modelParam = $comment;
         $hasOwner = "1";
-        return $userPermisions->update($user, $modelParam,  $hasOwner);
+        return $userPermisions->update($user, $operations, $hasOwner, $modelParam);
 
     }
     
     public function delete(User $user, Comment $comment)
     {
-  /*      $userPermisions = app('userPermissions');
-
-        return $userPermisions->delete($user, $comment);
-*/
 
         $userPermisions = app('userPermissions');
+        $operations = array("Delete Post");
         $modelParam = $comment;
         $hasOwner = "1";
-        return $userPermisions->delete($user, $modelParam,  $hasOwner);
+        return $userPermisions->delete($user, $operations, $hasOwner, $modelParam);
 
     }
 }

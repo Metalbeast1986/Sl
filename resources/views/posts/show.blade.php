@@ -23,7 +23,7 @@
 
         {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
         @endif
-        
+        {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
 
 </div>

@@ -32,23 +32,29 @@ class PostPolicy
     public function create(User $user)
     {
         $userPermisions = app('userPermissions');
-        return $userPermisions->create($user);
+        $operation = "Create Post";
+        $hasOwner = "0";
+        return $userPermisions->create($user,  $operation, $hasOwner);
     }
 
     public function update(User $user, Post $post)
     {
+
         $userPermisions = app('userPermissions');
+        $operation = "Edit Post";
         $modelParam = $post;
         $hasOwner = "0";
-        return $userPermisions->update($user, $modelParam,  $hasOwner);
+        return $userPermisions->update($user, $operation, $hasOwner, $modelParam);
+
     }
     public function delete(User $user, Post $post)
     {
-        
+    
         $userPermisions = app('userPermissions');
+        $operation = "Delete Post";
         $modelParam = $post;
         $hasOwner = "0";
-        return $userPermisions->delete($user, $modelParam,  $hasOwner);
+        return $userPermisions->delete($user, $operation, $hasOwner, $modelParam);
 
     }
 }
