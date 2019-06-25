@@ -10,34 +10,36 @@ use App\Permission;
 class UserPermissionService
 {
 
-    protected function checkPermission($user, $operations, ?string $hasOwner, ?string $modelParam)
+    protected function checkPermission($user, $operations, $hasOwner, $modelParam)
     {
         //direct permissions
+       
         foreach($operations as $operation){
-          
+        
             if ($user->hasPermissionTo($operation)) {  
                 if ($hasOwner === "1"){
-                    return $user->id === $modelParam->user_id;
+                     
+                    return $user->id === $modelParam->user_id; 
                 } else{
+                    
                 return true;
                 }
-            }
-          
+            }  
         }
 
         //role permissions
-         foreach($operations as $operation){
-        
-            $roles_r = Permission::findByName($operation)->roles->pluck('name'); //roles
+         foreach($operations as $operation){ 
+            $roles_r=Permission::findByName($operation)->roles->pluck('name'); //roles
         
             if ($user->hasRole($roles_r)) { 
                 if ($hasOwner === "1"){
-                    return $user->id === $modelParam->user_id;
+
+                    return $user->id === $modelParam->user_id;            
                 } else{
+
                 return true;
                 }
             }
-         
         }
           
         //location permissions
@@ -46,8 +48,14 @@ class UserPermissionService
 
             foreach ($user->location as $user_location) {
                 foreach($operations as $operation){
-                    if ($user_location->hasPermissionTo($operation)) {         
+                    if ($user_location->hasPermissionTo($operation)) {    
+                        if ($hasOwner === "1"){
+
+                            return $user->id === $modelParam->user_id;                           
+                        } else{
+        
                         return true;
+                        }
                     }
                 }
             }
@@ -59,19 +67,21 @@ class UserPermissionService
 
     public function create(User $user, $operations, $hasOwner)
     {
-        $modelParam = null;
 
+        $modelParam = null;
         return $this->checkPermission($user, $operations, $hasOwner, $modelParam);
     }
 
     public function update(User $user ,$operations, $hasOwner, $modelParam)
     {            
-       return $this->checkPermission($user, $operations, $modelParam, $hasOwner);
+
+       return $this->checkPermission($user, $operations, $hasOwner, $modelParam);
     }
 
     public function delete(User $user,  $operations, $hasOwner, $modelParam)
     {
-        return $this->checkPermission($user, $operations,  $modelParam, $hasOwner);
+
+        return $this->checkPermission($user, $operations, $hasOwner, $modelParam);
     }
 
 }

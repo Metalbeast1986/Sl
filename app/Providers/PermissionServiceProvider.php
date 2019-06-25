@@ -21,6 +21,5 @@ class PermissionServiceProvider extends ServiceProvider
             return App::make(UserPermissionService::class);
         });
 
-    
     }
 }
