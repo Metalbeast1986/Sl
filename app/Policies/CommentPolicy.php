@@ -7,6 +7,7 @@ use App\Comment;
 use App\Location;
 use Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\DB;
 
 class CommentPolicy
 {
@@ -28,9 +29,11 @@ class CommentPolicy
 
     public function create(User $user)
     { 
-
+    //    DB::enableQueryLog();
+       
         $userPermisions = app('userPermissions');
-
+    //    $userPermisions->create($user);
+    //    dd(DB::getQueryLog());
         return $userPermisions->create($user);
         
     }
@@ -38,16 +41,23 @@ class CommentPolicy
     public function update(User $user, Comment $comment)
     {
         $userPermisions = app('userPermissions');
-
-        return $userPermisions->update($user, $comment);
+        $modelParam = $comment;
+        $hasOwner = "1";
+        return $userPermisions->update($user, $modelParam,  $hasOwner);
 
     }
     
     public function delete(User $user, Comment $comment)
     {
-        $userPermisions = app('userPermissions');
+  /*      $userPermisions = app('userPermissions');
 
         return $userPermisions->delete($user, $comment);
+*/
+
+        $userPermisions = app('userPermissions');
+        $modelParam = $comment;
+        $hasOwner = "1";
+        return $userPermisions->delete($user, $modelParam,  $hasOwner);
 
     }
 }

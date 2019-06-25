@@ -2,13 +2,7 @@
 
 namespace App\Providers;
 use App;
-use App\Permission;
-use Illuminate\Http\Request;
-use App\Role;
-use App\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
-use Auth;
-use App\Services\UserPermission;
+use App\Services\UserPermissionService;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +18,7 @@ class PermissionServiceProvider extends ServiceProvider
     {
     
         $this->app->singleton('userPermissions', function () {
-            return App::make(UserPermission::class);
+            return App::make(UserPermissionService::class);
         });
 
     

@@ -19,7 +19,7 @@
         @if( (Gate::check('Delete Post') || Gate::check('Administer roles & permissions')) )
         {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
         @endif
-    
+        
     {!! Form::close() !!}
 
 </div>
