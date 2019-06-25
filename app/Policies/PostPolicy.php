@@ -15,19 +15,6 @@ class PostPolicy
      *
      * @return void
      */
-    /*   public function __construct()
-       {
-           $this->authorizeResource(Comment::class, 'comment');
-       }
-*/
-    /*
-        public function extractPermissions($user, 'create')
-        {
-            $user
-        }
-    */
-
-
 
     public function create(User $user)
     {

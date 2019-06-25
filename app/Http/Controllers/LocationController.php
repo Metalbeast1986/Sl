@@ -70,10 +70,10 @@ class LocationController extends Controller
     public function edit($id)
     {
         $location = Location::findOrFail($id); //Get user with specified id
-            $roles = Role::get(); //Get all roles
-            $permissions = Permission::get(); //Get all roles
-    
-            return view('locations.edit', compact('location', 'roles', 'permissions')); //pass user and roles data to view
+        $roles = Role::get(); //Get all roles
+        $permissions = Permission::get(); //Get all roles
+
+        return view('locations.edit', compact('location', 'roles', 'permissions')); //pass user and roles data to view
     }
     
     /**

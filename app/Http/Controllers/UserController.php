@@ -30,6 +30,7 @@ class UserController extends Controller
     {
         //Get all users and pass it to the view
         $users = User::all();
+
         return view('users.index')->with('users', $users);
     }
 
@@ -43,6 +44,7 @@ class UserController extends Controller
         //Get all roles and pass it to the view
         $roles = Role::get();
         $permissions = Permission::get();
+
         return view('users.create', ['roles'=>$roles], ['permissions'=>$permissions]);
     }
 
@@ -65,7 +67,8 @@ class UserController extends Controller
 
         $roles = $request['roles']; //Retrieving the roles field
         $permissions = $request['permissions']; //Retrieving the roles field
-    //Checking if a role was selected
+
+         //Checking if a role was selected
         if (isset($roles)) {
             foreach ($roles as $role) {
                 $role_r = Role::where('id', '=', $role)->firstOrFail();
@@ -79,7 +82,9 @@ class UserController extends Controller
                 $user->givePermissionTo($permission_r); //Assigning role to user
             }
         }
+
         //Redirect to the users.index view and display message
+
         return redirect()->route('users.index')
             ->with(
                 'flash_message',
@@ -106,6 +111,7 @@ class UserController extends Controller
     */
     public function edit($id)
     {
+        
         $user = User::findOrFail($id); //Get user with specified id
         $roles = Role::get(); //Get all roles
         $permissions = Permission::get(); //Get all roles
@@ -130,6 +136,7 @@ class UserController extends Controller
             'email'=>'required|email|unique:users,email,'.$id,
             'password'=>'required|min:6|confirmed'
         ]);
+        
         $input = $request->only(['name', 'email', 'password']); //Retreive the name, email and password fields
         $roles = $request['roles']; //Retreive all roles
         $permissions = $request['permissions']; //Retreive all roles
@@ -146,6 +153,7 @@ class UserController extends Controller
         } else {
             $user->permissions()->detach(); //If no role is selected remove exisiting role associated to a user
         }
+
         return redirect()->route('users.index')
             ->with(
                 'flash_message',

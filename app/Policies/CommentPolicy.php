@@ -31,11 +31,10 @@ class CommentPolicy
 
     public function create(User $user)
     { 
-
         $userPermisions = app('userPermissions');
-
         $operations = array("Create Post", "Write");
         $hasOwner = "";
+
         return $userPermisions->create($user, $operations, $hasOwner);
         
     }
@@ -46,6 +45,7 @@ class CommentPolicy
         $operations = array("Edit Post");
         $modelParam = $comment;
         $hasOwner = "1";
+
         return $userPermisions->update($user, $operations, $hasOwner, $modelParam);
 
     }
@@ -57,6 +57,7 @@ class CommentPolicy
         $operations = array("Delete Post");
         $modelParam = $comment;
         $hasOwner = "1";
+        
         return $userPermisions->delete($user, $operations, $hasOwner, $modelParam);
 
     }
