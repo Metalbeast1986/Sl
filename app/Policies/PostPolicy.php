@@ -15,33 +15,37 @@ class PostPolicy
      *
      * @return void
      */
-
-    public function create(User $user)
+    public function __construct()
     {
-        $userPermisions = app('userPermissions');
-        $operations = array("Create Post","Write");
-        $hasOwner = "0";
-        return $userPermisions->create($user,  $operations, $hasOwner);
+        $this->userPermisions = app('userPermissions');
+        
     }
-
-    public function update(User $user, Post $post)
+    public function create()
     {
 
-        $userPermisions = app('userPermissions');
-        $operations = array("Edit Post");
-        $modelParam = $post;
-        $hasOwner = "0";
-        return $userPermisions->update($user, $operations, $hasOwner, $modelParam);
+        $userPermisions = $this->userPermisions;
+        $operations = ["Create Post","Write"]; 
+
+        return $userPermisions->checkPermission($operations);
 
     }
-    public function delete(User $user, Post $post)
+
+    public function update()
+    {
+
+        $userPermisions = $this->userPermisions;
+        $operations = ["Edit Post"];
+       
+       return $userPermisions->checkPermission($operations);
+
+    }
+    public function delete()
     {
     
-        $userPermisions = app('userPermissions');
-        $operations = array("Delete Post");
-        $modelParam = $post;
-        $hasOwner = "0";
-        return $userPermisions->delete($user, $operations, $hasOwner, $modelParam);
+        $userPermisions = $this->userPermisions;
+        $operations = ["Delete Post"];
+       
+        return $userPermisions->checkPermission($operations);
 
     }
 }
