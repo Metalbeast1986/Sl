@@ -24,32 +24,37 @@ class CommentPolicy
         
     }
 
+    protected function getOperation(){
+       
+        return class_basename(Comment::class);
+
+    }
+
     public function show(User $user, Comment $comment)
     {
 
         return $user->id === $comment->user_id;
-
+        
     }
+    
 
     public function create()
     { 
-        $userPermisions = $this->userPermisions;
-        $operations = ["Create Post","Write"]; //1. neduodam pagal name, o duodam metodo pavadinima pvz modelioPavadinimas_metodoPavadinimas pvz comment_create
-    
-        return $userPermisions->checkPermission($operations);
+        //$operation = snake_case($this->getOperation()."_".__FUNCTION__);  
+        //return $this->userPermisions->checkPermission($operation);
 
-        
+        return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
+
     }
 
     public function update(User $user, Comment $comment)
     {
-        if ( $user->id === $comment->user_id){
-            $userPermisions = $this->userPermisions;
-            $operations = ["Edit Post"];
-            
-            return $userPermisions->checkPermission($operations);
+        if ($user->id === $comment->user_id){
+
+            return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
 
         } else{
+
 
             return false;
         }
@@ -57,15 +62,14 @@ class CommentPolicy
     
     public function delete(User $user, Comment $comment)
     {
-        if ( $user->id === $comment->user_id){
-            $userPermisions = $this->userPermisions;
-            $operations = ["Delete Post"];
-        
-            return $userPermisions->checkPermission($operations);
+        if ($user->id === $comment->user_id){
+           
+            return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
 
         } else{
 
             return false;
+
         }
 
     }

@@ -14,47 +14,42 @@ class UserPermissionService
         $this->user = Auth::user();
     }
 
-    public function checkPermission($operations)
+    public function checkPermission($operation)
     {
-        //direct permissions
-        $user = $this->user;
-        foreach($operations as $operation){
         
-            if ($user->hasPermissionTo($operation)) {  
-                
-                return true;
-   
-            }  
-        }
+        //direct permissions      
+        if ($this->user->hasPermissionTo($operation)) {  
+            
+            return true;
 
-        //role permissions
-         foreach($operations as $operation){ 
-            $roles_r=Permission::findByName($operation)->roles->pluck('name'); //roles
-        
-            if ($user->hasRole($roles_r)) { 
-              
-                return true;
-                
-            }
+        }  
+
+        //role permissions     
+        $roles_r = Permission::findByName($operation)->roles->pluck('name'); //roles
+    
+        if ($this->user->hasRole($roles_r)) { 
+            
+            return true;
+            
         }
-          
+                 
         //location permissions
-        if ($user->location) {
-            $user_location = Location::where('user_id', $user);
+        if ($this->user->location) {
+            $user_location = Location::where('user_id', $this->user);
 
-            foreach ($user->location as $user_location) {
-                foreach($operations as $operation){
-                    if ($user_location->hasPermissionTo($operation)) {                       
-        
-                        return true;
-                        
-                    }
+            foreach ($this->user->location as $user_location) {
+               
+                if ($user_location->hasPermissionTo($operation)) {                       
+    
+                    return true;
+                    
                 }
+                
             }
         }
 
         return false;
-
+        
     }
 
 }

@@ -1,9 +1,6 @@
 <?php
 namespace App\Policies;
-
-use App\User;
 use App\Post;
-use App\Location;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PostPolicy
@@ -20,32 +17,29 @@ class PostPolicy
         $this->userPermisions = app('userPermissions');
         
     }
+
+    protected function getOperation(){
+       
+        return class_basename(Post::class);
+    }
+
     public function create()
     {
 
-        $userPermisions = $this->userPermisions;
-        $operations = ["Create Post","Write"]; 
-
-        return $userPermisions->checkPermission($operations);
+        return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
 
     }
 
     public function update()
     {
 
-        $userPermisions = $this->userPermisions;
-        $operations = ["Edit Post"];
-       
-       return $userPermisions->checkPermission($operations);
+        return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
 
     }
     public function delete()
     {
     
-        $userPermisions = $this->userPermisions;
-        $operations = ["Delete Post"];
-       
-        return $userPermisions->checkPermission($operations);
+        return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
 
     }
 }
