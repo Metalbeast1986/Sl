@@ -1,87 +1,64 @@
 <?php
 namespace App\Services;
 
-use App\User;
+
 use App\Location;
-use App\Comment;
-use App\Role;
 use App\Permission;
+use Illuminate\Support\Facades\Gate;
+use Auth;
 
 class UserPermissionService
 {
 
-    protected function checkPermission($user, $operations, $hasOwner, $modelParam)
+    public function __construct()
     {
-        //direct permissions
-       
-        foreach($operations as $operation){
+        $this->user = Auth::user();
+    }
+
+    public function getOperation($class, $function){
+
+        return snake_case("$class $function");
+        //dd(snake_case("$class $function"));
+    }   
+
+
+
+    public function checkPermission($operation)
+    {
         
-            if ($user->hasPermissionTo($operation)) {  
-                if ($hasOwner === "1"){
-                     
-                    return $user->id === $modelParam->user_id; 
-                } else{
-                    
-                return true;
-                }
-            }  
+        //direct permissions      
+        if ($this->user->hasPermissionTo($operation)) {  
+            
+            return true;
+
+        }  
+
+        //role permissions     
+        $roles_r = Permission::findByName($operation)->roles->pluck('name'); //roles
+    
+        if ($this->user->hasRole($roles_r)) { 
+            
+            return true;
+            
         }
-
-        //role permissions
-         foreach($operations as $operation){ 
-            $roles_r=Permission::findByName($operation)->roles->pluck('name'); //roles
-        
-            if ($user->hasRole($roles_r)) { 
-                if ($hasOwner === "1"){
-
-                    return $user->id === $modelParam->user_id;            
-                } else{
-
-                return true;
-                }
-            }
-        }
-          
+                 
         //location permissions
-        if ($user->location) {
-            $user_location = Location::where('user_id', $user);
+        if ($this->user->location) {
+            $user_location = Location::where('user_id', $this->user);
 
-            foreach ($user->location as $user_location) {
-                foreach($operations as $operation){
-                    if ($user_location->hasPermissionTo($operation)) {    
-                        if ($hasOwner === "1"){
-
-                            return $user->id === $modelParam->user_id;                           
-                        } else{
-        
-                        return true;
-                        }
-                    }
+            foreach ($this->user->location as $user_location) {
+               
+                if ($user_location->hasPermissionTo($operation)) {                       
+    
+                    return true;
+                    
                 }
+                
             }
         }
 
         return false;
-
-    }
-
-    public function create(User $user, $operations, $hasOwner)
-    {
-
-        $modelParam = null;
-        return $this->checkPermission($user, $operations, $hasOwner, $modelParam);
-    }
-
-    public function update(User $user ,$operations, $hasOwner, $modelParam)
-    {            
-
-       return $this->checkPermission($user, $operations, $hasOwner, $modelParam);
-    }
-
-    public function delete(User $user,  $operations, $hasOwner, $modelParam)
-    {
-
-        return $this->checkPermission($user, $operations, $hasOwner, $modelParam);
+        
     }
 
 }

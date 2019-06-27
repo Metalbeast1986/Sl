@@ -1,9 +1,6 @@
 <?php
 namespace App\Policies;
-
-use App\User;
 use App\Post;
-use App\Location;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PostPolicy
@@ -15,33 +12,38 @@ class PostPolicy
      *
      * @return void
      */
-
-    public function create(User $user)
+    public function __construct()
     {
-        $userPermisions = app('userPermissions');
-        $operations = array("Create Post","Write");
-        $hasOwner = "0";
-        return $userPermisions->create($user,  $operations, $hasOwner);
+        $this->userPermisions = app('userPermissions');
+        
+    }
+    /*
+    protected function getOperation(){
+       
+        return class_basename(Post::class);
+    }
+    */
+    public function create()
+    {
+
+    //  return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
+    //  $name= str_replace('Policy', '', class_basename(get_class()));
+    //  dd($name);
+ 
+        return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(get_class())), __FUNCTION__));
+
     }
 
-    public function update(User $user, Post $post)
+    public function update()
     {
 
-        $userPermisions = app('userPermissions');
-        $operations = array("Edit Post");
-        $modelParam = $post;
-        $hasOwner = "0";
-        return $userPermisions->update($user, $operations, $hasOwner, $modelParam);
+        return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(get_class())), __FUNCTION__));
 
     }
-    public function delete(User $user, Post $post)
+    public function delete()
     {
     
-        $userPermisions = app('userPermissions');
-        $operations = array("Delete Post");
-        $modelParam = $post;
-        $hasOwner = "0";
-        return $userPermisions->delete($user, $operations, $hasOwner, $modelParam);
+        return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(get_class())), __FUNCTION__));
 
     }
 }

@@ -4,10 +4,8 @@ namespace App\Policies;
 
 use App\User;
 use App\Comment;
-use App\Location;
-use Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CommentPolicy
 {
@@ -21,43 +19,50 @@ class CommentPolicy
      * @return mixed
      */
     
+    public function __construct()
+    {
+        $this->userPermisions = app('userPermissions');
+        
+    }
 
     public function show(User $user, Comment $comment)
     {
 
         return $user->id === $comment->user_id;
-
-    }
-
-    public function create(User $user)
-    { 
-        $userPermisions = app('userPermissions');
-        $operations = array("Create Post","Write");
-        $hasOwner = "";
-
-        return $userPermisions->create($user, $operations, $hasOwner);
         
+    }
+    
+    public function create()
+    { 
+        //$operation = $this->userPermisions->getOperation(str_replace('Policy', '', class_basename(get_class())), __FUNCTION__);
+
+       return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(__CLASS__)), __FUNCTION__));
+
     }
 
     public function update(User $user, Comment $comment)
     {
-        $userPermisions = app('userPermissions');
-        $operations = array("Edit Post");
-        $modelParam = $comment;
-        $hasOwner = "1";
+        if ($user->id === $comment->user_id){
+
+            return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(__CLASS__)), __FUNCTION__));
         
-        return $userPermisions->update($user, $operations, $hasOwner, $modelParam);
+        } else{
+
+            return false;
+        }
 
     }
     
     public function delete(User $user, Comment $comment)
     {
+        if ($user->id === $comment->user_id){
 
-        $userPermisions = app('userPermissions');
-        $operations = array("Delete Post");
-        $modelParam = $comment;
-        $hasOwner = "1";
-        return $userPermisions->delete($user, $operations, $hasOwner, $modelParam);
+            return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(__CLASS__)), __FUNCTION__));
+         
+        } else{
+            return false;
+        }
+
 
     }
 }

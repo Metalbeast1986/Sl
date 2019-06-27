@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
 
             return "App\\Policies\\{$name}";
         });
-        
+
        // Gate::define('update-comment', 'App\Policies\CommentAuth@update');
     }
 }

@@ -24,8 +24,8 @@ class CommentController extends Controller
     public function edit(Comment $comment)
     {
         $this->authorize('update', $comment);
-
         return view('comments.edit', compact('comment'));
+        
     }
 
     public function update(Request $request, $id)
@@ -48,7 +48,7 @@ class CommentController extends Controller
     }
 
     public function create()
-    {
+    { 
         $this->authorize('create', Comment::class);
         $comment = new Comment;
 
