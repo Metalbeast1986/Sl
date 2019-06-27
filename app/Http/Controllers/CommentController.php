@@ -48,7 +48,7 @@ class CommentController extends Controller
     }
 
     public function create()
-    {
+    { 
         $this->authorize('create', Comment::class);
         $comment = new Comment;
 

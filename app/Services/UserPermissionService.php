@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Location;
 use App\Permission;
+use Illuminate\Support\Facades\Gate;
 use Auth;
 
 class UserPermissionService
@@ -13,6 +14,14 @@ class UserPermissionService
     {
         $this->user = Auth::user();
     }
+
+    public function getOperation($class, $function){
+
+        return snake_case("$class $function");
+        //dd(snake_case("$class $function"));
+    }   
+
+
 
     public function checkPermission($operation)
     {

@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\User;
 use App\Comment;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Str;
 
 class CommentPolicy
 {
@@ -24,12 +25,6 @@ class CommentPolicy
         
     }
 
-    protected function getOperation(){
-       
-        return class_basename(Comment::class);
-
-    }
-
     public function show(User $user, Comment $comment)
     {
 
@@ -37,13 +32,11 @@ class CommentPolicy
         
     }
     
-
     public function create()
     { 
-        //$operation = snake_case($this->getOperation()."_".__FUNCTION__);  
-        //return $this->userPermisions->checkPermission($operation);
+        //$operation = $this->userPermisions->getOperation(str_replace('Policy', '', class_basename(get_class())), __FUNCTION__);
 
-        return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
+       return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(__CLASS__)), __FUNCTION__));
 
     }
 
@@ -51,26 +44,25 @@ class CommentPolicy
     {
         if ($user->id === $comment->user_id){
 
-            return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
-
+            return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(__CLASS__)), __FUNCTION__));
+        
         } else{
-
 
             return false;
         }
+
     }
     
     public function delete(User $user, Comment $comment)
     {
         if ($user->id === $comment->user_id){
-           
-            return $this->userPermisions->checkPermission(snake_case($this->getOperation()."_".__FUNCTION__));
 
+            return $this->userPermisions->checkPermission($this->userPermisions->getOperation(str_replace('Policy', '', class_basename(__CLASS__)), __FUNCTION__));
+         
         } else{
-
             return false;
-
         }
+
 
     }
 }
